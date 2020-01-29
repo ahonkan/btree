@@ -38,6 +38,8 @@ public:
 		m_right = new btree(nodeID, val, this);
 	}
 
+	// Note: Recursion is built into the delete function
+	//
 	void delete_left()
 	{
 		if (m_left != NULL)
@@ -87,6 +89,8 @@ int main(void)
 	bt.get_left()->get_left()->get_left()->create_left(NodeID,4);
 	bt.get_left()->get_left()->get_left()->create_right(NodeID,4);
 
+	// Perform sorted add
+	// Do pre, in, post order traversal
 
 
 
