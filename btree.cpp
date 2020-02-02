@@ -173,11 +173,102 @@ public:
 		level --;
 	}
 
-	void level_order(int &level, int &max_level)
+	bool level_order(int desired_level, int current_level)
+  {
+    bool result = false;
+
+    if (current_level == desired_level)
+    {
+      printf("Level Order Node: %d level: %d ", m_nodeID, current_level); 
+      result = true;
+    }
+    else
+    {
+      bool left_traverse_result = false;
+      bool right_traverse_result = false;
+
+      current_level++;
+
+      if (m_left != NULL)
+        left_traverse_result = m_left->level_order(desired_level, current_level);
+      
+      if (m_right != NULL)
+        right_traverse_result = m_right->level_order(desired_level, current_level);
+    
+      result = left_traverse_result | right_traverse_result;
+    }
+
+    return result;
+  }
+  
+  void level_order(void)
+  {
+    for (int i = 0; i < 10; i++)
+    {
+      bool result = level_order(i, 0);
+  
+      printf("::: Level: %d results in %d\n", i, result);
+      if (result == false)
+        break;
+    }
+  }
 
 	// insertion
-	
+	bool level_order_insert(int &nodeID, T val, int desired_level, int current_level, bool &do_insert)
+  {
+    bool result = false;
 
+    if (current_level == desired_level)
+    {
+      printf("Level Order Node Present: %d level: %d ", m_nodeID, current_level); 
+      result = true;
+    }
+    else
+    {
+      bool left_traverse_result = false;
+      bool right_traverse_result = false;
+
+      current_level++;
+
+      if (m_left != NULL)
+        left_traverse_result = m_left->level_order_insert(nodeID, val, desired_level, current_level, do_insert);
+      else if (do_insert)
+      {
+        printf("Level Order Left Node created: %d level: %d ", m_nodeID, current_level); 
+        m_left = new btree(nodeID, val, this);
+        do_insert = false;
+      }
+      
+      if (m_right != NULL)
+        right_traverse_result = m_right->level_order_insert(nodeID, val, desired_level, current_level, do_insert);
+      else if (do_insert)
+      {
+        printf("Level Order Right Node created: %d level: %d ", m_nodeID, current_level); 
+        m_right = new btree(nodeID, val, this);
+        do_insert = false;
+      }    
+
+      result = left_traverse_result | right_traverse_result;
+		
+    }
+
+    return result;
+  }
+
+  void level_order_insert(int &nodeID, T val)
+	{
+    bool do_insert = true;
+
+    for (int i = 0; i < 10; i++)
+    {
+	    bool result = level_order_insert(nodeID, val, i, 0, do_insert);
+  
+      printf("::: Level: %d results in %d\n", i, result);
+      if (result == false)
+        break;
+    }
+
+	}
 
 private:
 
@@ -228,6 +319,26 @@ int main(void)
 
 	printf("\n");
 	bt.post_order(level, max_level);
+
+
+  bt.level_order();
+
+  bt.level_order_insert(NodeID, 8);
+  bt.level_order_insert(NodeID, 9);
+  bt.level_order_insert(NodeID, 10);
+  bt.level_order_insert(NodeID, 11);
+
+  bt.level_order_insert(NodeID, 12);
+  bt.level_order_insert(NodeID, 13);
+  bt.level_order_insert(NodeID, 14);
+  bt.level_order_insert(NodeID, 15);
+  
+  bt.level_order_insert(NodeID, 16);
+
+  bt.level_order();
+
+
+
 
 	// Perform sorted add
 
